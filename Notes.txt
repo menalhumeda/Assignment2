@@ -1,0 +1,84 @@
+1. Copy week-4 for program-1
+2. create folder models 
+3. inside models create file book.js
+ copy following code
+
+ 4. create new file in routes -->book.js
+let express = require("express");
+let router = express.Router();
+let mongoose = require("mongoose");
+
+// connect to our Book Model
+let Book = require("../models/book");
+
+/* GET Route for the Book List page - READ OPeration */
+router.get("/", (req, res, next) => {
+  Book.find((err, bookList) => {
+    if (err) {
+      return console.error(err);
+    } else {
+      console.log(bookList);
+
+      //res.render("book", { title: "Book List", BookList: bookList });
+    }
+  });
+});
+
+module.exports = router;
+
+5. Now in app.js add book router
+let booksRouter = require("../routes/book");
+
+app.use("/book-list", booksRouter);
+
+6. Go to browser
+localhost:3000/book-list
+
+7. view -template requite to view data create file
+views->partials-book.ejs
+copy cod from index.ejs to book.ejs
+
+8. now in the book.ejs file change the main content
+<main class="container">
+  //add boostrap table code
+
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6">
+      <h1><%=title %></h1>
+      <br />
+      <table class="table table-bordered table-striped table-hover">
+        <!--HEader row-->
+        <tr>
+          <th class="text-center">Name</th>
+          <th class="text-center">Author</th>
+          <th class="text-center">Published</th>
+          <th class="text-center">Descripotion</th>
+          <th class="text-center">Price</th>
+        </tr>
+
+        <!--Repetable Templet row-->
+        <tr>
+        <% for (let count=0; count<BookList.length; count++){%>
+            <td class="text-centre "><%=BookList[count].name %></td>
+            <td class="text-centre "><%=BookList[count].author %></td>
+            <td class="text-centre "><%=BookList[count].published %></td>
+            <td class="text-centre "><%=BookList[count].description %></td>
+            <td class="text-centre "><%=BookList[count].price %></td>
+
+        <%}%>
+</tr>
+      </table>
+    </div>
+  </div>
+</main>
+
+9. now go back to booklist to view on browser but before that go to routes-book.js
+comment console print
+and add following line
+res.render("book", { title: "Book List", BookList: bookList });
+
+10. summary 
+create book Model -mongoose schema for all CurD operation
+made a route test on cosole
+connect route with app.js --> bookrouter and top levelurl book-list
+container to show the books cretae now template book.ejs
